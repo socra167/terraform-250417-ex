@@ -1,0 +1,10 @@
+### IntelliJ IDEA ###
+.idea
+
+### Terraform ###
+.terraform
+terraform.tfstate
+.terraform.lock.hcl
+
+## ETC ###
+.DS_STORE
