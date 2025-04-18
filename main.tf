@@ -287,7 +287,7 @@ data "aws_ami" "amazon_linux" {
 # EC2 인스턴스 생성
 resource "aws_instance" "ec2_1" {
   # 사용할 AMI ID
-  ami = data.aws_ami.amazon_linux
+  ami = data.aws_ami.amazon_linux.id
   # EC2 인스턴스 유형
   instance_type = "t3.micro"
   # 사용할 서브넷 ID
