@@ -253,10 +253,40 @@ FLUSH PRIVILEGES;
 END_OF_FILE
 }
 
+data "aws_ami" "amazon_linux" {
+  most_recent = true
+  owners      = ["137112412989"] # Amazon Linux 공식 퍼블리셔
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"] # 또는 gp3
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  filter {
+    name   = "platform-details"
+    values = ["Linux/UNIX"]
+  }
+}
+
 # EC2 인스턴스 생성
 resource "aws_instance" "ec2_1" {
   # 사용할 AMI ID
-  ami = "ami-062cddb9d94dcf95d"
+  ami = data.aws_ami.amazon_linux
   # EC2 인스턴스 유형
   instance_type = "t3.micro"
   # 사용할 서브넷 ID
