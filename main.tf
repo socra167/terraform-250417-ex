@@ -254,13 +254,13 @@ echo "${var.github_access_token_1}" | docker login ghcr.io -u "${var.github_acce
 END_OF_FILE
 }
 
-data "aws_ami" "amazon_linux" {
+data "aws_ami" "amazon_linux_2023" {
   most_recent = true
-  owners      = ["137112412989"] # Amazon Linux 공식 퍼블리셔
+  owners      = ["amazon"]
 
   filter {
     name   = "name"
-    values = ["amzn2-ami-hvm-*-x86_64-gp2"] # 또는 gp3
+    values = ["al2023-ami-2023.*-x86_64"] # Amazon Linux 2023
   }
 
   filter {
@@ -269,25 +269,30 @@ data "aws_ami" "amazon_linux" {
   }
 
   filter {
-    name   = "root-device-type"
-    values = ["ebs"]
-  }
-
-  filter {
     name   = "virtualization-type"
     values = ["hvm"]
   }
 
   filter {
-    name   = "platform-details"
-    values = ["Linux/UNIX"]
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+
+  filter {
+    name   = "block-device-mapping.volume-type"
+    values = ["gp2", "gp3"]
+  }
+
+  filter {
+    name   = "description"
+    values = ["Amazon Linux 2023*", "Amazon Linux 2*"]
   }
 }
 
 # EC2 인스턴스 생성
 resource "aws_instance" "ec2_1" {
   # 사용할 AMI ID
-  ami = data.aws_ami.amazon_linux.id
+  ami = data.aws_ami.amazon_linux_2023.id
   # EC2 인스턴스 유형
   instance_type = "t3.micro"
   # 사용할 서브넷 ID
